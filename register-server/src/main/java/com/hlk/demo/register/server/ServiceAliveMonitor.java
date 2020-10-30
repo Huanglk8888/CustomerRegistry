@@ -19,9 +19,6 @@ public class ServiceAliveMonitor {
     private Daemon daemon;
 
     public ServiceAliveMonitor() {
-//		ThreadGroup daemonThreadGroup = new ThreadGroup("daemon");
-//		System.out.println("daemon线程组的父线程组是：" + daemonThreadGroup.getParent());
-//		this.daemon = new Daemon(daemonThreadGroup, "ServiceAliveMonitor");
 
         this.daemon = new Daemon();
         // 只要设置了这个标志位，就代表这个线程是一个daemon线程，后台线程

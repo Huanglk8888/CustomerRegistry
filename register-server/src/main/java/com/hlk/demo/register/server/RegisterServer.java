@@ -1,6 +1,7 @@
 package com.hlk.demo.register.server;
 
 import java.util.UUID;
+import com.hlk.demo.register.server.HeartbeatResponse;
 
 /**
  * 代表了服务注册中心的这么一个东西

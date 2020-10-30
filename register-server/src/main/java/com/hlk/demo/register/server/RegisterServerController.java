@@ -1,5 +1,7 @@
 package com.hlk.demo.register.server;
 
+import java.util.Map;
+
 /**
  * 这个controller是负责接收register-client发送过来的请求的
  * 在Spring Cloud Eureka中用的组件是jersey，百度一下jersey是什么东西
@@ -8,10 +10,11 @@ package com.hlk.demo.register.server;
  * @author huanglk
  */
 public class RegisterServerController {
-    private ServiceRegistry serviceRegistry = ServiceRegistry.getInstance();
+    private ServiceRegistry registry = ServiceRegistry.getInstance();
 
     /**
      * 服务注册
+     *
      * @param registerRequest 注册请求
      * @return 注册响应
      */
@@ -26,7 +29,7 @@ public class RegisterServerController {
             serviceInstance.setServiceInstanceId(registerRequest.getServiceInstanceId());
             serviceInstance.setServiceName(registerRequest.getServiceName());
 
-            serviceRegistry.register(serviceInstance);
+            registry.register(serviceInstance);
 
             registerResponse.setStatus(RegisterResponse.SUCCESS);
         } catch (Exception e) {
@@ -39,6 +42,7 @@ public class RegisterServerController {
 
     /**
      * 发送心跳
+     *
      * @param heartbeatRequest 心跳请求
      * @return 心跳响应
      */
@@ -46,9 +50,14 @@ public class RegisterServerController {
         HeartbeatResponse heartbeatResponse = new HeartbeatResponse();
 
         try {
-            ServiceInstance serviceInstance = serviceRegistry.getServiceInstance(
+            // 对服务实例进行续约
+            ServiceInstance serviceInstance = registry.getServiceInstance(
                     heartbeatRequest.getServiceName(), heartbeatRequest.getServiceInstanceId());
             serviceInstance.renew();
+
+            // 记录一下每分钟的心跳的次数
+            HeartbeatMessuredRate heartbeatMessuredRate = new HeartbeatMessuredRate();
+            heartbeatMessuredRate.increment();
 
             heartbeatResponse.setStatus(HeartbeatResponse.SUCCESS);
         } catch (Exception e) {
@@ -57,5 +66,13 @@ public class RegisterServerController {
         }
 
         return heartbeatResponse;
+    }
+
+    /**
+     * 拉取服务注册表
+     * @return
+     */
+    public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
+        return registry.getRegistry();
     }
 }
