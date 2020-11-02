@@ -1,6 +1,5 @@
 package com.hlk.demo.register.server;
 
-import java.rmi.dgc.Lease;
 
 /**
  * 代表了一个服务实例

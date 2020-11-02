@@ -27,6 +27,10 @@ public class RegisterClient {
      */
     private HeartbeatWorker heartbeatWorker;
     /**
+     * 客户端缓存的注册表
+     */
+    private ClientCachedServiceRegistry registry;
+    /**
      * 服务实例是否在运行
      */
     private volatile Boolean isRunning;
@@ -53,8 +57,10 @@ public class RegisterClient {
             registerWorker.start();
             registerWorker.join();
 
-            HeartbeatWorker heartbeatWorker = new HeartbeatWorker();
+            // 启动心跳线程，定时发送心跳信息
             heartbeatWorker.start();
+            // 初始化客户端缓存的服务注册表组件
+            this.registry.initialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,12 +72,23 @@ public class RegisterClient {
     public void shutdown() {
         this.isRunning = false;
         this.heartbeatWorker.interrupt();
+        this.registry.destroy();
+        this.httpSender.cancel(SERVICE_NAME,serviceInstanceId);
+    }
+
+    /**
+     * 返回RegisterClient是否正在运行
+     *
+     * @return
+     */
+    public Boolean isRunning() {
+        return isRunning;
     }
 
     /**
      * 服务注册线程
-     * @author zhonghuashishan
      *
+     * @author zhonghuashishan
      */
     private class RegisterWorker extends Thread {
 
@@ -96,8 +113,8 @@ public class RegisterClient {
 
     /**
      * 心跳线程
-     * @author zhonghuashishan
      *
+     * @author zhonghuashishan
      */
     private class HeartbeatWorker extends Thread {
 
@@ -110,7 +127,7 @@ public class RegisterClient {
 
             HeartbeatResponse heartbeatResponse = null;
 
-            while(isRunning) {
+            while (isRunning) {
                 try {
                     heartbeatResponse = httpSender.heartbeat(heartbeatRequest);
                     System.out.println("心跳的结果为：" + heartbeatResponse.getStatus() + "......");

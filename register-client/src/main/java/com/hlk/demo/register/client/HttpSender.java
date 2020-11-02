@@ -1,5 +1,8 @@
 package com.hlk.demo.register.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 负责发送各种http请求的组件
  * @author huanglk
@@ -37,6 +40,41 @@ public class HttpSender {
 		response.setStatus(RegisterResponse.SUCCESS); 
 		
 		return response;
+	}
+
+
+	/**
+	 * 拉取服务注册表
+	 * @return
+	 */
+	public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
+		Map<String, Map<String, ServiceInstance>> registry =
+				new HashMap<String, Map<String, ServiceInstance>>();
+
+		ServiceInstance serviceInstance = new ServiceInstance();
+		serviceInstance.setHostname("finance-service-01");
+		serviceInstance.setIp("192.168.31.1207");
+		serviceInstance.setPort(9000);
+		serviceInstance.setServiceInstanceId("FINANCE-SERVICE-192.168.31.207:9000");
+		serviceInstance.setServiceName("FINANCE-SERVICE");
+
+		Map<String, ServiceInstance> serviceInstances = new HashMap<String, ServiceInstance>();
+		serviceInstances.put("FINANCE-SERVICE-192.168.31.207:9000", serviceInstance);
+
+		registry.put("FINANCE-SERVICE", serviceInstances);
+
+		System.out.println("拉取注册表：" + registry);
+
+		return registry;
+	}
+
+	/**
+	 * 服务下线
+	 * @param serviceName 服务名称
+	 * @param serviceInstanceId 服务实例id
+	 */
+	public void cancel(String serviceName, String serviceInstanceId) {
+		System.out.println("服务实例下线【" + serviceName + ", " + serviceInstanceId + "】");
 	}
 	
 }
