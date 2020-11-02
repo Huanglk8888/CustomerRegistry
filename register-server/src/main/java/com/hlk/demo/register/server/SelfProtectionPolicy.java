@@ -22,8 +22,25 @@ public class SelfProtectionPolicy {
     public static SelfProtectionPolicy getInstance(){
         return instance;
     }
+    /**
+     * 是否需要开启自我保护机制
+     * @return
+     */
+    public Boolean isEnable() {
+        HeartbeatMessuredRate heartbeatMessuredRate = HeartbeatMessuredRate.getInstance();
+        long latestMinuteHeartbeatRate = heartbeatMessuredRate.get();
 
-    public long getExpectedHeartbeatRate() {
+        if (latestMinuteHeartbeatRate<this.expectedHeartbeatThreshold){
+            System.out.println("【自我保护机制开启】最近一分钟心跳次数=" + latestMinuteHeartbeatRate + ", 期望心跳次数=" + this.expectedHeartbeatThreshold);
+            return true;
+        }
+        System.out.println("【自我保护机制未开启】最近一分钟心跳次数=" + latestMinuteHeartbeatRate + ", 期望心跳次数=" + this.expectedHeartbeatThreshold);
+        return false;
+
+    }
+
+
+        public long getExpectedHeartbeatRate() {
         return expectedHeartbeatRate;
     }
 
