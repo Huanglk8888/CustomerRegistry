@@ -60,6 +60,14 @@ public class ServiceAliveMonitor {
                             // 从注册表中摘除这个服务实例
                             if (!serviceInstance.isAlive()) {
                                 serviceRegistry.remove(serviceName, serviceInstance.getServiceInstanceId());
+                                // 更新自我保护机制的阈值
+                                synchronized(SelfProtectionPolicy.class) {
+                                    SelfProtectionPolicy selfProtectionPolicy = SelfProtectionPolicy.getInstance();
+                                    selfProtectionPolicy.setExpectedHeartbeatRate(
+                                            selfProtectionPolicy.getExpectedHeartbeatRate() - 2);
+                                    selfProtectionPolicy.setExpectedHeartbeatThreshold(
+                                            (long)(selfProtectionPolicy.getExpectedHeartbeatRate() * 0.85));
+                                }
                             }
                         }
                     }
