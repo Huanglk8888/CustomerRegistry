@@ -117,7 +117,7 @@ public class FSEditlog {
     /**
      * 代表了一条edits log
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     class EditLog {
 
@@ -134,7 +134,7 @@ public class FSEditlog {
     /**
      * 内存双缓冲
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     class DoubleBuffer {
         /**

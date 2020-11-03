@@ -39,7 +39,7 @@ public class ServiceAliveMonitor {
     /**
      * 负责监控微服务存活状态的后台线程
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     private class Daemon extends Thread {
         private ServiceRegistry serviceRegistry = ServiceRegistry.getInstance();

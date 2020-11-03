@@ -78,7 +78,7 @@ public class FSDirectory {
     /**
      * 代表的是文件目录树中的一个节点
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     private interface INode {
 
@@ -87,7 +87,7 @@ public class FSDirectory {
     /**
      * 代表文件目录树中的一个目录
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     public static class INodeDirectory implements INode {
         private String path;
@@ -122,7 +122,7 @@ public class FSDirectory {
     /**
      * 代表文件目录树中的一个文件
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     public static class INodeFile implements INode {
         private String name;

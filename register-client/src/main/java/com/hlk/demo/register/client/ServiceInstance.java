@@ -5,7 +5,7 @@ package com.hlk.demo.register.client;
  * 里面包含了一个服务实例的所有信息
  * 比如说服务名称、ip地址、hostname、端口号、服务实例id
  * 
- * @author zhonghuashishan
+ * @author huanglk
  *
  */
 public class ServiceInstance {

@@ -2,7 +2,7 @@ package com.hlk.demo.register.server;
 
 /**
  * 心跳请求
- * @author zhonghuashishan
+ * @author huanglk
  *
  */
 public class HeartbeatRequest {

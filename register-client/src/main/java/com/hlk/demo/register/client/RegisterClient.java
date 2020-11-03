@@ -88,7 +88,7 @@ public class RegisterClient {
     /**
      * 服务注册线程
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     private class RegisterWorker extends Thread {
 
@@ -114,7 +114,7 @@ public class RegisterClient {
     /**
      * 心跳线程
      *
-     * @author zhonghuashishan
+     * @author huanglk
      */
     private class HeartbeatWorker extends Thread {
 
