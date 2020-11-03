@@ -96,6 +96,15 @@ public class ServiceRegistry {
         return registry;
     }
 
+
+    /**
+     * 获取最近有变化的注册表
+     * @return
+     */
+    public synchronized LinkedList<RecentlyChangedServiceInstance> getRecentlyChangedQueue(){
+        return recentlyChangedQueue;
+    }
+
     /**
      * 从注册表删除一个服务实例
      *

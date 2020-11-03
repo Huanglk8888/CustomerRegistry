@@ -1,5 +1,7 @@
 package com.hlk.demo.register.server;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -82,6 +84,15 @@ public class RegisterServerController {
      */
     public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
         return registry.getRegistry();
+    }
+
+    /**
+     * 拉取增量服务注册表
+     *
+     * @return
+     */
+    public LinkedList<ServiceRegistry.RecentlyChangedServiceInstance> fetchDeltaServiceRegistry() {
+        return registry.getRecentlyChangedQueue();
     }
 
 
