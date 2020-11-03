@@ -82,8 +82,8 @@ public class RegisterServerController {
      *
      * @return
      */
-    public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
-        return registry.getRegistry();
+    public DeltaRegistry fetchServiceRegistry() {
+        return registry.getDeltaRegistry();
     }
 
     /**

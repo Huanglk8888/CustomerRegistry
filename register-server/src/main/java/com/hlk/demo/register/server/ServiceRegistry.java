@@ -99,11 +99,29 @@ public class ServiceRegistry {
 
     /**
      * 获取最近有变化的注册表
+     *
      * @return
      */
-    public synchronized LinkedList<RecentlyChangedServiceInstance> getRecentlyChangedQueue(){
+    public synchronized LinkedList<RecentlyChangedServiceInstance> getRecentlyChangedQueue() {
         return recentlyChangedQueue;
     }
+
+    /**
+     * 获取最近有变化的注册表
+     * @return
+     */
+    public synchronized DeltaRegistry getDeltaRegistry() {
+        Long totalCount = 0L;
+        for(Map<String, ServiceInstance> serviceInstanceMap : registry.values()) {
+            totalCount += serviceInstanceMap.size();
+        }
+
+        DeltaRegistry deltaRegistry = new DeltaRegistry(
+                recentlyChangedQueue, totalCount);
+
+        return deltaRegistry;
+    }
+
 
     /**
      * 从注册表删除一个服务实例

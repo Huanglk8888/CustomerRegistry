@@ -3,6 +3,7 @@ package com.hlk.demo.register.client;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import com.hlk.demo.register.client.CachedServiceRegistry.RecentlyChangedServiceInstance;
 
 /**
  * 负责发送各种http请求的组件
@@ -48,7 +49,7 @@ public class HttpSender {
 	 * 拉取服务注册表
 	 * @return
 	 */
-	public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
+	public Map<String, Map<String, ServiceInstance>> fetchFullRegistry() {
 		Map<String, Map<String, ServiceInstance>> registry =
 				new HashMap<String, Map<String, ServiceInstance>>();
 
@@ -73,9 +74,9 @@ public class HttpSender {
 	 * 增量拉取服务注册表
 	 * @return
 	 */
-	public LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance> fetchDeltaServiceRegistry() {
-		LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance> recentlyChangedQueue =
-				new LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance>();
+	public DeltaRegistry fetchDeltaRegistry() {
+		LinkedList<RecentlyChangedServiceInstance> recentlyChangedQueue =
+				new LinkedList<RecentlyChangedServiceInstance>();
 
 		ServiceInstance serviceInstance = new ServiceInstance();
 		serviceInstance.setHostname("order-service-01");
@@ -84,8 +85,7 @@ public class HttpSender {
 		serviceInstance.setServiceInstanceId("ORDER-SERVICE-192.168.31.288:9000");
 		serviceInstance.setServiceName("ORDER-SERVICE");
 
-		CachedServiceRegistry.RecentlyChangedServiceInstance recentlyChangedItem =
-				new CachedServiceRegistry.RecentlyChangedServiceInstance(
+		RecentlyChangedServiceInstance recentlyChangedItem = new RecentlyChangedServiceInstance(
 				serviceInstance,
 				System.currentTimeMillis(),
 				"register");
@@ -94,7 +94,9 @@ public class HttpSender {
 
 		System.out.println("拉取增量注册表：" + recentlyChangedQueue);
 
-		return recentlyChangedQueue;
+		DeltaRegistry deltaRegistry = new DeltaRegistry(recentlyChangedQueue, 2L);
+
+		return deltaRegistry;
 	}
 
 	/**
