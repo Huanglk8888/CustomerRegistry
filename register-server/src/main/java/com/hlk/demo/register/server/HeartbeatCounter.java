@@ -1,7 +1,6 @@
 package com.hlk.demo.register.server;
 
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
  * 心跳测量计数器
@@ -19,8 +18,8 @@ public class HeartbeatCounter {
     /**
      * 最近一分钟的心跳次数
      */
-    //private AtomicLong latestMinuteHeartbeatRate = new AtomicLong(0L);
-    private LongAdder latestMinuteHeartbeatRate = new LongAdder();
+    private AtomicLong latestMinuteHeartbeatRate = new AtomicLong(0L);
+   // private LongAdder latestMinuteHeartbeatRate = new LongAdder();
     /**
      * 最近一分钟的时间戳
      */
@@ -51,16 +50,16 @@ public class HeartbeatCounter {
         // 如果你的服务实例很多的话，1万个服务实例，每秒可能都有很多个请求过来更新心跳
         // 如果在这里加了synchronized的话，会影响并发的性能
         // 换成了AtomicLong原子类之后，不加锁，无锁化，CAS操作，保证原子性，还可以多线程并发
-        //latestMinuteHeartbeatRate.incrementAndGet();
-        latestMinuteHeartbeatRate.increment();
+        latestMinuteHeartbeatRate.incrementAndGet();
+        //latestMinuteHeartbeatRate.increment();
     }
 
     /**
      * 获取最近一分钟的心跳次数
      */
     public /**synchronized*/ long get() {
-        //return latestMinuteHeartbeatRate.get();
-        return latestMinuteHeartbeatRate.longValue();
+        return latestMinuteHeartbeatRate.get();
+        //return latestMinuteHeartbeatRate.longValue();
     }
 
     private class Daemon extends Thread {
@@ -71,9 +70,12 @@ public class HeartbeatCounter {
                 try {
                     long currentTime = System.currentTimeMillis();
                     if(currentTime - latestMinuteTimestamp > 60 * 1000) {
-                        //latestMinuteHeartbeatRate = new AtomicLong(0L);
-                        latestMinuteHeartbeatRate= new LongAdder();
-                        latestMinuteTimestamp = System.currentTimeMillis();
+                        while(true) {
+                            Long expectedValue = latestMinuteHeartbeatRate.get();
+                            if(latestMinuteHeartbeatRate.compareAndSet(expectedValue, 0L)) {
+                                break;
+                            }
+                        }
                     }
                     Thread.sleep(1000);
                 } catch (Exception e) {
