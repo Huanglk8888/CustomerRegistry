@@ -1,6 +1,7 @@
 package com.hlk.demo.register.client;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -66,6 +67,34 @@ public class HttpSender {
 		System.out.println("拉取注册表：" + registry);
 
 		return registry;
+	}
+
+	/**
+	 * 增量拉取服务注册表
+	 * @return
+	 */
+	public LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance> fetchDeltaServiceRegistry() {
+		LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance> recentlyChangedQueue =
+				new LinkedList<CachedServiceRegistry.RecentlyChangedServiceInstance>();
+
+		ServiceInstance serviceInstance = new ServiceInstance();
+		serviceInstance.setHostname("order-service-01");
+		serviceInstance.setIp("192.168.31.288");
+		serviceInstance.setPort(9000);
+		serviceInstance.setServiceInstanceId("ORDER-SERVICE-192.168.31.288:9000");
+		serviceInstance.setServiceName("ORDER-SERVICE");
+
+		CachedServiceRegistry.RecentlyChangedServiceInstance recentlyChangedItem =
+				new CachedServiceRegistry.RecentlyChangedServiceInstance(
+				serviceInstance,
+				System.currentTimeMillis(),
+				"register");
+
+		recentlyChangedQueue.add(recentlyChangedItem);
+
+		System.out.println("拉取增量注册表：" + recentlyChangedQueue);
+
+		return recentlyChangedQueue;
 	}
 
 	/**
