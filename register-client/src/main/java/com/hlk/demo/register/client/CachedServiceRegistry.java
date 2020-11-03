@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author huanglk
  */
-public class ClientCachedServiceRegistry {
+public class CachedServiceRegistry {
     /**
      * 服务注册表拉取间隔时间
      */
@@ -34,8 +34,8 @@ public class ClientCachedServiceRegistry {
      */
     private HttpSender httpSender;
 
-    public ClientCachedServiceRegistry(RegisterClient registerClient,
-                                       HttpSender httpSender) {
+    public CachedServiceRegistry(RegisterClient registerClient,
+                                 HttpSender httpSender) {
         this.daemon = new Daemon();
         this.registerClient = registerClient;
         this.httpSender = httpSender;

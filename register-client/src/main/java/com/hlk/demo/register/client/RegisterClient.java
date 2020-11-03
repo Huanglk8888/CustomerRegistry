@@ -29,7 +29,7 @@ public class RegisterClient {
     /**
      * 客户端缓存的注册表
      */
-    private ClientCachedServiceRegistry registry;
+    private CachedServiceRegistry registry;
     /**
      * 服务实例是否在运行
      */
